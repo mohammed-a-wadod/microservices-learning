@@ -23,10 +23,8 @@
 hs_err_pid*
 mohamedservices/.DS_Store
 .DS_Store
-mohamedservices/.idea/jarRepositories.xml
-mohamedservices/.idea/misc.xml
-mohamedservices/.idea/vcs.xml
-mohamedservices/.idea/compiler.xml
-mohamedservices/.idea/encodings.xml
-mohamedservices/.idea/workspace.xml
-mohamedservices/.idea/uiDesigner.xml
+mohamedservices/.idea/
+/target/
+/.idea/compiler.xml
+/.idea/encodings.xml
+/.idea/jpa-buddy.xml
