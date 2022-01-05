@@ -1,4 +1,4 @@
-package com.mohamedcode.clients.fraud;
+package com.mohamedcode.clients.fraud.interfaces;
 
 import com.mohamedcode.clients.fraud.pojos.fraud.FraudCheckResponse;
 import org.springframework.cloud.openfeign.FeignClient;

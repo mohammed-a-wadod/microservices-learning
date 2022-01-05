@@ -1,16 +1,20 @@
 package com.mohamedcode.customer.services;
 
-import com.mohamedcode.clients.fraud.FraudClient;
-import com.mohamedcode.clients.fraud.pojos.fraud.FraudCheckResponse;
-import com.mohamedcode.customer.models.entities.Customer;
+import com.mohamedcode.clients.fraud.interfaces.FraudClient;
+import com.mohamedcode.clients.fraud.interfaces.NotificationClient;
 import com.mohamedcode.clients.fraud.pojos.customer.CustomerRegistrationRequest;
+import com.mohamedcode.clients.fraud.pojos.fraud.FraudCheckResponse;
+import com.mohamedcode.clients.fraud.pojos.notification.NotificationRequest;
+import com.mohamedcode.customer.models.entities.Customer;
 import com.mohamedcode.customer.repositories.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public record CustomerService(CustomerRepository customerRepository, FraudClient fraudClient) {
+public record CustomerService(CustomerRepository customerRepository,
+                              FraudClient fraudClient,
+                              NotificationClient notificationClient) {
 
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder().firstName(request.firstName()).lastName(request.lastName()).email(request.email()).build();
@@ -22,6 +26,12 @@ public record CustomerService(CustomerRepository customerRepository, FraudClient
         FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customer.getId());
         if (fraudCheckResponse.isFraudster()) throw new IllegalStateException("fraudster");
         //TODO send notification
+        notificationClient.sendNotification( new NotificationRequest(
+                customer.getId(),
+                customer.getEmail(),
+                String.format("Hi %s, welcome to my code...",
+                        customer.getFirstName())
+        ));
     }
 
 }
