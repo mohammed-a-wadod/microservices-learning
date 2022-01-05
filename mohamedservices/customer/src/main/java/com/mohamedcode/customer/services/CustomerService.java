@@ -25,7 +25,7 @@ public record CustomerService(CustomerRepository customerRepository,
         //TODO check if customer isFraudster
         FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customer.getId());
         if (fraudCheckResponse.isFraudster()) throw new IllegalStateException("fraudster");
-        //TODO send notification
+        //TODO make it async i.e add to queue
         notificationClient.sendNotification( new NotificationRequest(
                 customer.getId(),
                 customer.getEmail(),
