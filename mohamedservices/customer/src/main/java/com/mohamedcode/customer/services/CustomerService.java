@@ -22,7 +22,7 @@ public record CustomerService(CustomerRepository customerRepository, RestTemplat
         //TODO check if email is not taken
         customerRepository.saveAndFlush(customer);
         //TODO check if customer isFraudster
-        ResponseEntity<FraudCheckResponse> fraudCheckResponse = restTemplate.getForEntity("http://localhost:8081/api/v1/fraud-check/{customerId}",
+        ResponseEntity<FraudCheckResponse> fraudCheckResponse = restTemplate.getForEntity("http://FRAUD/api/v1/fraud-check/{customerId}",
                 FraudCheckResponse.class, customer.getId());
         if (Objects.requireNonNull(fraudCheckResponse.getBody()).isFraudster())
             throw new IllegalStateException("fraudster");
