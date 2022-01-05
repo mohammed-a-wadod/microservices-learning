@@ -1,6 +1,6 @@
 package com.mohamedcode.fraud.controllers;
 
-import com.mohamedcode.fraud.models.pojos.FraudCheckResponse;
+import com.mohamedcode.clients.fraud.pojos.fraud.FraudCheckResponse;
 import com.mohamedcode.fraud.services.FraudCheckService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public record FraudCheckController(FraudCheckService fraudCheckService) {
 
     @GetMapping("{customerId}")
-    public FraudCheckResponse isFraudster(@PathVariable Long customerId) {
+    public FraudCheckResponse isFraudster(@PathVariable("customerId") Long customerId) {
         boolean isFraudulentCustomer = fraudCheckService.isFraudulentCustomer(customerId);
         log.info("fraud check request for customer {}", customerId);
         return new FraudCheckResponse(isFraudulentCustomer);

@@ -1,19 +1,16 @@
 package com.mohamedcode.customer.services;
 
+import com.mohamedcode.clients.fraud.FraudClient;
+import com.mohamedcode.clients.fraud.pojos.fraud.FraudCheckResponse;
 import com.mohamedcode.customer.models.entities.Customer;
-import com.mohamedcode.customer.models.pojo.CustomerRegistrationRequest;
-import com.mohamedcode.customer.models.pojo.FraudCheckResponse;
+import com.mohamedcode.clients.fraud.pojos.customer.CustomerRegistrationRequest;
 import com.mohamedcode.customer.repositories.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Objects;
 
 @Slf4j
 @Service
-public record CustomerService(CustomerRepository customerRepository, RestTemplate restTemplate) {
+public record CustomerService(CustomerRepository customerRepository, FraudClient fraudClient) {
 
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer.builder().firstName(request.firstName()).lastName(request.lastName()).email(request.email()).build();
@@ -22,10 +19,8 @@ public record CustomerService(CustomerRepository customerRepository, RestTemplat
         //TODO check if email is not taken
         customerRepository.saveAndFlush(customer);
         //TODO check if customer isFraudster
-        ResponseEntity<FraudCheckResponse> fraudCheckResponse = restTemplate.getForEntity("http://FRAUD/api/v1/fraud-check/{customerId}",
-                FraudCheckResponse.class, customer.getId());
-        if (Objects.requireNonNull(fraudCheckResponse.getBody()).isFraudster())
-            throw new IllegalStateException("fraudster");
+        FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customer.getId());
+        if (fraudCheckResponse.isFraudster()) throw new IllegalStateException("fraudster");
         //TODO send notification
     }
 

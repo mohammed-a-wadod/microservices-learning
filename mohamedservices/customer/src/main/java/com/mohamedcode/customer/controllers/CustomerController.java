@@ -1,6 +1,6 @@
 package com.mohamedcode.customer.controllers;
 
-import com.mohamedcode.customer.models.pojo.CustomerRegistrationRequest;
+import com.mohamedcode.clients.fraud.pojos.customer.CustomerRegistrationRequest;
 import com.mohamedcode.customer.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
